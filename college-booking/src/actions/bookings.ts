@@ -4,11 +4,13 @@ import { prisma } from "@/lib/prisma";
 export async function getUserBookings(userId: number) {
   const bookings = await prisma.booking.findMany({
     where: { userId },
-    include: { resource: true },
+    include: {
+      resource: true,
+      user: true,
+    },
     orderBy: { date: "desc" },
   });
 
-  // Convert numbers and dates to strings so they can be passed to Client Components
   return bookings.map((b) => ({
     ...b,
     id: String(b.id),
