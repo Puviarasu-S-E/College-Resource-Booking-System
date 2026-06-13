@@ -3,7 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { comparePassword } from "@/lib/auth";
 import { signToken } from "@/lib/jwt";
 
-const COOKIE = { httpOnly: true, path: "/", maxAge: 60 * 60 * 24 * 7 };
+const COOKIE = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax" as const,
+  path: "/",
+  maxAge: 60 * 60 * 24 * 7,
+};
 
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
